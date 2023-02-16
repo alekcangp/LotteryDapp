@@ -1,9 +1,18 @@
 //SPDX-License-Identifier:MIT
 pragma solidity ^0.8.15;
 
+interface IERC20 {
+    // mind the `view` modifier
+    function balanceOf(address account) external view returns (uint256);
+    function transfer(address recipient, uint256 amount) external returns (bool);
+    function transferFrom(address sender, address recipient, uint256 amount) external returns (bool);
+}
+
 contract Lottery{
     //State /Storage Variable
     address public owner;
+    address public token;
+    address public module;
     address payable[] public players;
     address[] public winners;
     uint public lotteryId;
@@ -12,11 +21,14 @@ contract Lottery{
     constructor(){
         owner= msg.sender;
         lotteryId = 0;
+        token = 0xFD4b70e285DfB9710eA9e95e58EaE824Fa00488A;
+        module = 0xa7B8d36708604c46dc896893ea58357A975d6E6b;
     }
 
     //Enter Function to enter in lottery
     function enter()public payable{
-        require(msg.value >= 0.1 ether);
+        require(IERC20(token).balanceOf(msg.sender) >= 100*10**18, "Insufficient Balance");
+        IERC20(token).transferFrom(msg.sender, address(this), 100*10**18);
         players.push(payable(msg.sender));
     }
 
@@ -27,7 +39,7 @@ contract Lottery{
 
     //Get Balance 
     function getbalance() public view returns(uint){
-        return address(this).balance;
+        return IERC20(token).balanceOf(address(this));
     }
      
     //Get Lottery Id
@@ -43,7 +55,7 @@ contract Lottery{
     //Pick Winner
     function pickWinner() public onlyOwner{
         uint randomIndex =getRandomNumber()%players.length;
-        players[randomIndex].transfer(address(this).balance);
+        IERC20(token).transfer(players[randomIndex], getbalance());
         winners.push(players[randomIndex]);
         //Current lottery done
         lotteryId++;
@@ -56,8 +68,9 @@ contract Lottery{
     }
 
     modifier onlyOwner(){
-        require(msg.sender == owner,"Only owner have control");
+        require(msg.sender == owner || msg.sender == module,"Only owner or DAO have control");
         _;
     }
+
 
 }
