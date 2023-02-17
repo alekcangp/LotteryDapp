@@ -19,7 +19,7 @@ export const AppProvider = ({ children }) => {
 
   useEffect(() => {
     updateLottery();
-    connectWallet();
+    //connectWallet();
   }, [lotteryContract]);
 
   //Update the lottery Card
@@ -32,9 +32,9 @@ export const AppProvider = ({ children }) => {
 
       setLotteryPlayers(await lotteryContract.methods.getPlayers().call());
 
-      //console.log(lotteryPlayers);
+      console.log(lotteryPlayers);
       setLastWinner(await lotteryContract.methods.getWinners().call());
-      //console.log([...lastWinner], "Last Winners");
+      console.log([...lastWinner], "Last Winners");
     }
   };
 
@@ -66,27 +66,40 @@ export const AppProvider = ({ children }) => {
         console.log(error, "connect wallet");
       }
     } else {
-      console.log("Please install Metamask");
+      alert("Please install Metamask");
     }
   };
 
   //Enter Lottery
   const enterLottery = async () => {
     try {
-      await tokenContract.methods
-        .approve(contractAddress, web3.utils.toWei("100000"))
-        .send({
-          from: address,
-          value: web3.utils.toWei("0", "ether"),
-          gas: 300000,
-          gasPrice: null,
-        });
+      const appr = await tokenContract.methods
+        .allowance(address, contractAddress)
+        .call();
+      if (appr == 0) {
+        await tokenContract.methods
+          .approve(contractAddress, web3.utils.toWei("100000"))
+          .send({
+            from: address,
+            value: web3.utils.toWei("0", "ether"),
+            gas: 300000,
+            gasPrice: null,
+          });
+      }
+      const bal = await tokenContract.methods.balanceOf(address).call();
+      //console.log(bal);
+      if (bal < 100) {
+        alert("Insufficient Balance WBGL");
+        return;
+      }
+
       await lotteryContract.methods.enter().send({
         from: address,
         value: web3.utils.toWei("0", "ether"),
         gas: 300000,
         gasPrice: null,
       });
+      updateLottery();
     } catch (error) {
       console.log(error);
     }

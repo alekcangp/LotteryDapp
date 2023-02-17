@@ -1,24 +1,30 @@
-import style from '../styles/Table.module.css'
-import TableRow from './TableRow'
-import { useAppContext } from '../context/context'
+import style from "../styles/Table.module.css";
+import TableRow from "./TableRow";
+import { useAppContext } from "../context/context";
 const Table = () => {
-  const { lotteryPlayers } = useAppContext()
+  const { lotteryPlayers } = useAppContext();
+  var pls = [], plss = [], names = {};
+  lotteryPlayers.forEach(item => {
+    names[item] = (names[item] || 0) + 1;
+  });
+  plss = Array.from(new Set(lotteryPlayers))
+  for (var i = 0; i < plss.length; i++) {
+    pls.push({ player: plss[i], amount: 100*names[plss[i]] });
+  }
   return (
     <div className={style.wrapper}>
       <div className={style.tableHeader}>
         <div className={style.addressTitle}>💳 User Address</div>
-        <div className={style.amountTitle}>💲 Amount</div>
+        <div className={style.amountTitle}>🪙 Amount</div>
       </div>
       <div className={style.rows}>
-        {lotteryPlayers.length > 0 ? (
-          lotteryPlayers.map((player, index) => (
-            <TableRow key={index} player={player} />
-          ))
+        {pls.length > 0 ? (
+          pls.map((value, index) => <TableRow key={index} value={value} />)
         ) : (
           <div className={style.noPlayers}>No players yet</div>
         )}
       </div>
     </div>
-  )
-}
-export default Table
+  );
+};
+export default Table;
