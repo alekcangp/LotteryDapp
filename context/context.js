@@ -11,7 +11,7 @@ export const AppProvider = ({ children }) => {
   const [web3, setWeb3] = useState();
   const [lotteryContract, setLotteryContract] = useState();
   const [tokenContract, setTokenContract] = useState();
-  const [lotteryPot, setLotteryPot] = useState("0 MATIC");
+  const [lotteryPot, setLotteryPot] = useState("0 WBGL");
   const [lotteryPlayers, setLotteryPlayers] = useState([]);
   const [lastWinner, setLastWinner] = useState([]);
   const [lotteryId, setLotteryId] = useState();
@@ -19,7 +19,7 @@ export const AppProvider = ({ children }) => {
 
   useEffect(() => {
     updateLottery();
-    //connectWallet();
+    connectWallet();
   }, [lotteryContract]);
 
   //Update the lottery Card

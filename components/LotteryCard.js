@@ -18,7 +18,7 @@ const LotteryCard = () => {
       <div className={style.title}>
         {/* TODO: Dynamically render the lotteryID */}
         Lottery{" "}
-        <span className={style.textAccent}>#{lotteryId ? lotteryId : "1"}</span>
+        <span className={style.textAccent}>#{lotteryId ? lotteryId : "0"}</span>
       </div>
       <div className={style.pot}>
         {/* TODO: Dynamically render the lottery pot */}
