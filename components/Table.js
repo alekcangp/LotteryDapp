@@ -3,14 +3,17 @@ import TableRow from "./TableRow";
 import { useAppContext } from "../context/context";
 const Table = () => {
   const { lotteryPlayers } = useAppContext();
-  var pls = [], plss = [], names = {};
-  lotteryPlayers.forEach(item => {
+  var pls = [],
+    plss = [],
+    names = {};
+  lotteryPlayers.forEach((item) => {
     names[item] = (names[item] || 0) + 1;
   });
-  plss = Array.from(new Set(lotteryPlayers))
+  plss = Array.from(new Set(lotteryPlayers));
   for (var i = 0; i < plss.length; i++) {
-    pls.push({ player: plss[i], amount: 100*names[plss[i]] });
+    pls.push({ player: plss[i], amount: 100 * names[plss[i]] });
   }
+  console.log(pls);
   return (
     <div className={style.wrapper}>
       <div className={style.tableHeader}>
