@@ -13,6 +13,7 @@ export const AppProvider = ({ children }) => {
   const [lotteryContract, setLotteryContract] = useState();
   const [tokenContract, setTokenContract] = useState();
   const [lotteryPot, setLotteryPot] = useState("0 WBGL");
+  const [wait, setWait] = useState();
   const [lotteryPlayers, setLotteryPlayers] = useState([]);
   const [lastWinner, setLastWinner] = useState([]);
   const [lotteryId, setLotteryId] = useState();
@@ -96,6 +97,7 @@ export const AppProvider = ({ children }) => {
 
   //Enter Lottery
   const enterLottery = async () => {
+    setWait(true);
     try {
       const bal = await tokenContract.methods.balanceOf(address).call();
       //console.log(bal);
@@ -112,26 +114,28 @@ export const AppProvider = ({ children }) => {
           .approve(contractAddress, web3.utils.toWei("100000"))
           .send({
             from: address,
-            value: web3.utils.toWei("0", "ether"),
-            gas: 50000,
+            value: 0,
+            gas: 100000,
             gasPrice: null,
           });
       }
 
       await lotteryContract.methods.enter().send({
         from: address,
-        value: web3.utils.toWei("0", "ether"),
-        gas: 100000,
+        value: 0,
+        gas: 300000,
         gasPrice: null,
       });
       updateLottery();
     } catch (error) {
       console.log(error);
     }
+    setWait(false);
   };
 
   //pick winner
   const pickWinner = async () => {
+    setWait(true);
     try {
       let tx = await lotteryContract.methods.pickWinner().send({
         from: address,
@@ -144,6 +148,7 @@ export const AppProvider = ({ children }) => {
     } catch (err) {
       console.log(err, "pick Winner");
     }
+    setWait(false);
   };
 
   return (
@@ -158,6 +163,7 @@ export const AppProvider = ({ children }) => {
         pickWinner,
         lastWinner,
         owner,
+        wait,
       }}
     >
       {children}

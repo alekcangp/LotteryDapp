@@ -12,6 +12,7 @@ const LotteryCard = () => {
     lastWinner,
     address,
     owner,
+    wait,
   } = useAppContext();
   return (
     <div className={style.wrapper}>
@@ -39,7 +40,7 @@ const LotteryCard = () => {
         )}
       </div>
       {/* TODO: Add onClick functionality to the buttons */}
-      {address !== owner ? (
+      {address !== owner && !wait ? (
         <div className={style.btn} onClick={enterLottery}>
           Enter{" "}
         </div>
@@ -47,10 +48,15 @@ const LotteryCard = () => {
         <div></div>
       )}
 
-      {address === owner ? (
+      {address === owner && !wait ? (
         <div className={style.btn} onClick={pickWinner}>
           Pick Winner
         </div>
+      ) : (
+        <div></div>
+      )}
+      {wait == true ? (
+        <div className={style.btn}>Processing...</div>
       ) : (
         <div></div>
       )}
