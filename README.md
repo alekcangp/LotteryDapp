@@ -18,6 +18,16 @@ You can start editing the page by modifying `pages/index.js`. The page auto-upda
 
 The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
 
+## Contracts
+
+0xaD6f767A7903750440C632149490ebcCc141C92b Goerli, lottery
+
+0x128c067E882c4eDecd838DFCC7bE48Ff1e7627B6 BSC, lottery
+
+0xFD4b70e285DfB9710eA9e95e58EaE824Fa00488A Goerli, GBGL token
+
+0x2bA64EFB7A4Ec8983E22A49c81fa216AC33f383A BSC, WBGL token
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
