@@ -1,3 +1,7 @@
+/**
+ *Submitted for verification at BscScan.com on 2023-02-18
+*/
+
 //SPDX-License-Identifier:MIT
 pragma solidity ^0.8.15;
 
@@ -8,27 +12,26 @@ interface IERC20 {
     function transferFrom(address sender, address recipient, uint256 amount) external returns (bool);
 }
 
-contract Lottery{
+contract BGLLottery{
     //State /Storage Variable
     address public owner;
     address public token;
-    address public module;
+    address public daoModule;
     address payable[] public players;
     address[] public winners;
     uint public lotteryId;
 
-    //Constructor runs when the cintract is deployed
     constructor(){
         owner= msg.sender;
         lotteryId = 0;
-        token = 0xFD4b70e285DfB9710eA9e95e58EaE824Fa00488A;
-        module = 0xa7B8d36708604c46dc896893ea58357A975d6E6b;
+        token = 0x2bA64EFB7A4Ec8983E22A49c81fa216AC33f383A; // WBGL token
+        daoModule = 0xa7B8d36708604c46dc896893ea58357A975d6E6b; // Execute proposals via https://snapshot.org/#/bgldao.eth
     }
 
     //Enter Function to enter in lottery
     function enter()public payable{
-        require(IERC20(token).balanceOf(msg.sender) >= 100*10**18, "Insufficient Balance");
-        IERC20(token).transferFrom(msg.sender, address(this), 100*10**18);
+        require(IERC20(token).balanceOf(msg.sender) >= 50*10**18, "Insufficient Balance");
+        IERC20(token).transferFrom(msg.sender, address(this), 50*10**18);
         players.push(payable(msg.sender));
     }
 
@@ -68,7 +71,7 @@ contract Lottery{
     }
 
     modifier onlyOwner(){
-        require(msg.sender == owner || msg.sender == module,"Only owner or DAO have control");
+        require(msg.sender == owner || msg.sender == daoModule,"Only owner or DAO have control");
         _;
     }
 
