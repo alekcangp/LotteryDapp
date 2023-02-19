@@ -22,7 +22,7 @@ The `pages/api` directory is mapped to `/api/*`. Files in this directory are tre
 
 0xaD6f767A7903750440C632149490ebcCc141C92b Goerli, lottery
 
-0x128c067E882c4eDecd838DFCC7bE48Ff1e7627B6 BSC, lottery
+0xad9E04188058B877Bc894b4c30Ba39A5c442AF27 BSC, lottery
 
 0xFD4b70e285DfB9710eA9e95e58EaE824Fa00488A Goerli, GBGL token
 
