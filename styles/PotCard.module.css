@@ -11,6 +11,16 @@
   padding: 20px;
   flex-direction: column;
   margin-top: 40px;
+  opacity: 0;
+  animation: ani 3s forwards;
+}
+@keyframes ani {
+  60% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .title {

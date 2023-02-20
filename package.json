@@ -10,6 +10,8 @@
     "export": "next build && next export"
   },
   "dependencies": {
+    "@moralisweb3/common-evm-utils": "^2.14.2",
+    "moralis": "^2.14.2",
     "next": "12.2.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",

@@ -13,7 +13,7 @@ const Table = () => {
   for (var i = 0; i < plss.length; i++) {
     pls.push({ player: plss[i], amount: 50 * names[plss[i]] });
   }
-  console.log(pls);
+  //console.log(pls);
   return (
     <div className={style.wrapper}>
       <div className={style.tableHeader}>
