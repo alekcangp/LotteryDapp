@@ -4,7 +4,7 @@
   background-color: #383c47;
   width: 100%;
   min-height: 50px;
-  max-height: 80px;
+  max-height: 90px;
   color: #f1f1f3;
   display: flex;
   align-items: center;
@@ -14,13 +14,14 @@
   top: 0;
   left: 0;
   border-bottom: 1px solid white;
+  white-space: nowrap;
 }
 
 .neon {
   font-family: "Neon 80s", sans-serif;
   font-size: 2rem;
   color: #ffedff;
-  padding: 10px;
+  padding: 20px;
   filter: url(#stroke) url(#inner-glow) url(#outer-glow) url(#outer-glow1);
 }
 
