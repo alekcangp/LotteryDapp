@@ -42,7 +42,7 @@ const LotteryCard = () => {
       {/* TODO: Add onClick functionality to the buttons */}
       {address !== owner && !wait ? (
         <div className={style.btn} onClick={enterLottery}>
-          Enter{" "}
+          Enter<a className={style.enter}>50 WBGL</a>
         </div>
       ) : (
         <div></div>
