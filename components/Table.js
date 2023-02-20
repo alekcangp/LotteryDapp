@@ -11,9 +11,9 @@ const Table = () => {
   });
   plss = Array.from(new Set(lotteryPlayers));
   for (var i = 0; i < plss.length; i++) {
-    pls.push({ player: plss[i], amount: 100 * names[plss[i]] });
+    pls.push({ player: plss[i], amount: 50 * names[plss[i]] });
   }
-  console.log(pls);
+  //console.log(pls);
   return (
     <div className={style.wrapper}>
       <div className={style.tableHeader}>
