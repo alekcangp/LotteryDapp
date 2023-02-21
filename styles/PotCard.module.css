@@ -1,3 +1,145 @@
+.wait {
+  color: #ff4080;
+  font-size: 1.3rem;
+  font-weight: bolder;
+  padding: 1.1rem 5rem 1.25rem 5rem;
+  margin-top: 20px;
+  letter-spacing: 0.075em;
+  text-decoration: none;
+}
+
+.voltagebutton {
+  position: relative;
+}
+
+.voltagebutton button {
+  color: #ff4080;
+  background-color: #242833;
+  padding: 1rem 5rem 1rem 5rem;
+  border-radius: 1.5rem;
+  border: 4px solid #ff4080;
+  font-size: 1.5rem;
+  line-height: 1em;
+  letter-spacing: 0.075em;
+  text-decoration: none;
+  margin-top: 20px;
+  font-weight: bolder;
+  cursor: pointer;
+}
+
+.voltagebutton button:hover + svg,
+.voltagebutton button:hover + svg + .dots {
+  opacity: 1;
+}
+.voltagebutton svg {
+  display: block;
+  position: absolute;
+  top: 0.5em;
+  left: -0.25em;
+  width: calc(100% + 0.5em);
+  height: calc(100% + 0em);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s;
+  transition-delay: 0.1s;
+}
+.voltagebutton svg path {
+  stroke-dasharray: 100;
+  filter: url("#glow");
+}
+.voltagebutton svg path.line1 {
+  stroke: #f6de8d;
+  stroke-dashoffset: 0;
+  animation: spark-1 3s linear infinite;
+}
+.voltagebutton svg path.line2 {
+  stroke: #6bfeff;
+  stroke-dashoffset: 500;
+  animation: spark-2 3s linear infinite;
+}
+.voltagebutton .dots {
+  opacity: 0;
+  transition: opacity 0.3s;
+  transition-delay: 0.4s;
+}
+.voltagebutton .dots .dot {
+  width: 1rem;
+  height: 1rem;
+  background: white;
+  border-radius: 100%;
+  position: absolute;
+  opacity: 0;
+}
+.voltagebutton .dots .dot1 {
+  top: 0;
+  left: 20%;
+  animation: fly-up 3s linear infinite;
+}
+.voltagebutton .dots .dot2 {
+  top: 0;
+  left: 55%;
+  animation: fly-up 3s linear infinite;
+  animation-delay: 0.5s;
+}
+.voltagebutton .dots .dot3 {
+  top: 0;
+  left: 80%;
+  animation: fly-up 3s linear infinite;
+  animation-delay: 1s;
+}
+.voltagebutton .dots .dot4 {
+  bottom: 0;
+  left: 30%;
+  animation: fly-down 3s linear infinite;
+  animation-delay: 2.5s;
+}
+.voltage-button .dots .dot5 {
+  bottom: 0;
+  left: 65%;
+  animation: fly-down 3s linear infinite;
+  animation-delay: 1.5s;
+}
+@keyframes spark-1 {
+  to {
+    stroke-dashoffset: -1000;
+  }
+}
+@keyframes spark-2 {
+  to {
+    stroke-dashoffset: -500;
+  }
+}
+@keyframes fly-up {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0.2);
+  }
+  5% {
+    opacity: 1;
+    transform: translateY(-1.5rem) scale(0.4);
+  }
+  10%,
+  100% {
+    opacity: 0;
+    transform: translateY(-3rem) scale(0.2);
+  }
+}
+@keyframes fly-down {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0.2);
+  }
+  5% {
+    opacity: 1;
+    transform: translateY(1.5rem) scale(0.4);
+  }
+  10%,
+  100% {
+    opacity: 0;
+    transform: translateY(3rem) scale(0.2);
+  }
+}
+
 .wrapper {
   background-color: #242833;
   min-height: 200px;
@@ -14,6 +156,8 @@
   margin-top: 40px;
   opacity: 0;
   animation: ani 3s forwards;
+  justify-content: center;
+  align-items: center;
 }
 @keyframes ani {
   60% {
