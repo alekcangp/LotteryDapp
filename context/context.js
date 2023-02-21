@@ -126,7 +126,8 @@ export const AppProvider = ({ children }) => {
       const bal = await tokenContract.methods.balanceOf(address).call();
       //console.log(bal);
       if (bal < 50) {
-        alert("Insufficient Balance WBGL");
+        alert("Insufficient Balance. Requires 50 WBGL");
+        setWait(false);
         return;
       }
 

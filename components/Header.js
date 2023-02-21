@@ -36,7 +36,7 @@ const Header = () => {
           </filter>
 
           <filter id="inner-glow">
-            <feFlood flood-color="#e10b8d" />
+            <feFlood floodColor="#e10b8d" />
             <feComposite in2="SourceAlpha" operator="out" />
             <feGaussianBlur stdDeviation="0.5" result="blur" />
             <feComposite operator="atop" in2="SourceGraphic" />
@@ -50,7 +50,7 @@ const Header = () => {
               result="thicken"
             />
             <feGaussianBlur in="thicken" stdDeviation="5" result="blurred" />
-            <feFlood flood-color="#db0273" result="glowColor" />
+            <feFlood floodColor="#db0273" result="glowColor" />
             <feComposite
               in="glowColor"
               in2="blurred"
@@ -71,7 +71,7 @@ const Header = () => {
               result="thicken"
             />
             <feGaussianBlur in="thicken" stdDeviation="25" result="blurred" />
-            <feFlood flood-color="#383c47" result="glowColor" />
+            <feFlood floodColor="#383c47" result="glowColor" />
             <feComposite
               in="glowColor"
               in2="blurred"
