@@ -11,7 +11,7 @@ const Table = () => {
   });
   plss = Array.from(new Set(lotteryPlayers));
   for (var i = 0; i < plss.length; i++) {
-    pls.push({ player: plss[i], amount: 50 * names[plss[i]] });
+    pls.push({ player: plss[i], amount: 5 * names[plss[i]] });
   }
   //console.log(pls);
   return (

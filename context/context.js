@@ -3,6 +3,7 @@ import Web3 from "web3";
 import createLotteryContract from "../utils/lotteryContract";
 import createTokenContract from "../utils/tokenContract";
 import { contractAddress } from "../utils/constants.js";
+import spin from "./spin.svg";
 
 const Moralis = require("moralis").default;
 const { EvmChain } = require("@moralisweb3/common-evm-utils");
@@ -29,6 +30,7 @@ export const AppProvider = ({ children }) => {
 
   useEffect(() => {
     updateLottery();
+    setWait("ENTER");
     //connectWallet();
   }, [lotteryContract]);
 
@@ -121,13 +123,12 @@ export const AppProvider = ({ children }) => {
 
   //Enter Lottery
   const enterLottery = async () => {
-    setWait(true);
+    if (wait != "ENTER") return;
     try {
       const bal = await tokenContract.methods.balanceOf(address).call();
       //console.log(bal);
-      if (bal < 50) {
-        alert("Insufficient Balance. Requires 50 WBGL");
-        setWait(false);
+      if (bal < 5) {
+        alert("Insufficient Balance. Requires 5 WBGL");
         return;
       }
 
@@ -135,6 +136,7 @@ export const AppProvider = ({ children }) => {
         .allowance(address, contractAddress)
         .call();
       if (appr == 0) {
+        setWait(<img src={spin} />);
         await tokenContract.methods
           .approve(contractAddress, web3.utils.toWei("100000"))
           .send({
@@ -144,7 +146,7 @@ export const AppProvider = ({ children }) => {
             gasPrice: null,
           });
       }
-
+      setWait(<img src={spin} />);
       await lotteryContract.methods.enter().send({
         from: address,
         value: 0,
@@ -155,12 +157,12 @@ export const AppProvider = ({ children }) => {
     } catch (error) {
       console.log(error);
     }
-    setWait(false);
+    setWait("ENTER");
   };
 
   //pick winner
   const pickWinner = async () => {
-    setWait(true);
+    setWait(<img src={spin} />);
     try {
       let tx = await lotteryContract.methods.pickWinner().send({
         from: address,
@@ -173,7 +175,7 @@ export const AppProvider = ({ children }) => {
     } catch (err) {
       console.log(err, "pick Winner");
     }
-    setWait(false);
+    setWait("ENTER");
   };
 
   return (
