@@ -2,8 +2,21 @@ import { createContext, useState, useEffect, useContext } from "react";
 import Web3 from "web3";
 import createLotteryContract from "../utils/lotteryContract";
 import createTokenContract from "../utils/tokenContract";
-import { contractAddress } from "../utils/constants.js";
+//import { contractAddress } from "../utils/constants.js";
 import spin from "./spin.svg";
+import {
+  contractAddress,
+  contractABI,
+  tokenABI,
+  tokenAddress,
+} from "../utils/constants.js";
+import {
+  useAccount,
+  useContractRead,
+  useContractWrite,
+  usePrepareContractWrite,
+  useWaitForTransaction,
+} from "wagmi";
 
 const Moralis = require("moralis").default;
 const { EvmChain } = require("@moralisweb3/common-evm-utils");
@@ -22,17 +35,102 @@ export const AppProvider = ({ children }) => {
   const [lotteryContract, setLotteryContract] = useState();
   const [tokenContract, setTokenContract] = useState();
   const [lotteryPot, setLotteryPot] = useState(" ");
-  const [wait, setWait] = useState();
+  const [wait, setWait] = useState("ENTER");
   const [lotteryPlayers, setLotteryPlayers] = useState([]);
   const [lastWinner, setLastWinner] = useState([]);
   const [lotteryId, setLotteryId] = useState(" ");
   const owner = "0xA1485801Ea9d4c890BC7563Ca92d90c4ae52eC75";
 
+  const { address: addr } = useAccount();
+
+  const { config: conf1 } = usePrepareContractWrite({
+    address: contractAddress,
+    abi: contractABI,
+    functionName: "enter",
+    args: [],
+  });
+  const {
+    write: ente,
+    status: stat1,
+    data: has1,
+  } = useContractWrite({
+    ...conf1,
+    onSuccess(data) {
+      setWait(<img src={spin} />);
+    },
+  });
+
+  const waitForEntering = useWaitForTransaction({
+    hash: has1?.hash,
+    onSettled(data, error) {
+      setWait("ENTER");
+      updateLottery();
+    },
+  });
+
+  //
+  const { config: conf2 } = usePrepareContractWrite({
+    address: tokenAddress,
+    abi: tokenABI,
+    functionName: "approve",
+    args: [contractAddress, "10000000000000000000000"],
+  });
+  const {
+    write: appr,
+    status: stat2,
+    data: has2,
+  } = useContractWrite({
+    ...conf2,
+    onSuccess(data) {
+      setWait(<img src={spin} />);
+    },
+  });
+  const waitForApproving = useWaitForTransaction({
+    hash: has2?.hash,
+    onSettled(data, error) {
+      setWait("ENTER");
+    },
+  });
+
+  const { data: allow } = useContractRead({
+    address: tokenAddress,
+    abi: tokenABI,
+    functionName: "allowance",
+    args: [addr, contractAddress],
+  });
+
   useEffect(() => {
     updateLottery();
-    setWait("ENTER");
+    //setWait("ENTER");
+    //infi();
     //connectWallet();
   }, [lotteryContract]);
+
+  // useEffect(() => {
+  //   infi();
+  // }, [stat1, stat2]);
+
+  const infi = () => {
+    if ((stat1 || stat2) == "loading") {
+      //setWait(<img src={spin} />);
+    } //else {
+    // setWait("ENTER");
+    // }
+
+    console.log(stat1);
+  };
+  console.log(waitForEntering.status);
+  const enter = () => {
+    //setWait(<img src={spin} />);
+    if (allow == 0x00) {
+      appr();
+    } else {
+      ente();
+      //console.log(a);
+
+      //setWait("ENTER");
+    }
+  };
 
   // Call contract function
   async function tg(func) {
@@ -157,7 +255,7 @@ export const AppProvider = ({ children }) => {
     } catch (error) {
       console.log(error);
     }
-    setWait("ENTER");
+    //setWait("ENTER");
   };
 
   //pick winner
@@ -175,7 +273,7 @@ export const AppProvider = ({ children }) => {
     } catch (err) {
       console.log(err, "pick Winner");
     }
-    setWait("ENTER");
+    //setWait("ENTER");
   };
 
   return (
@@ -191,6 +289,7 @@ export const AppProvider = ({ children }) => {
         lastWinner,
         owner,
         wait,
+        enter,
       }}
     >
       {children}

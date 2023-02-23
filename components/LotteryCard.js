@@ -1,23 +1,12 @@
 import style from "../styles/PotCard.module.css";
 import truncateEthAddress from "truncate-eth-address";
 import { useAppContext } from "../context/context";
-import {
-  contractAddress,
-  contractABI,
-  tokenABI,
-  tokenAddress,
-} from "../utils/constants.js";
-import {
-  useAccount,
-  useContractRead,
-  useContractWrite,
-  usePrepareContractWrite,
-} from "wagmi";
 
 const LotteryCard = () => {
   // TODO: Get the data needed from context
   const {
-    enterLottery,
+    //enterLottery,
+    enter,
     lotteryPot,
     lotteryId,
     pickWinner,
@@ -26,31 +15,6 @@ const LotteryCard = () => {
     owner,
     wait,
   } = useAppContext();
-
-  const { address: addr } = useAccount();
-
-  const { config: conf1 } = usePrepareContractWrite({
-    address: contractAddress,
-    abi: contractABI,
-    functionName: "enter",
-    args: [],
-  });
-  const { write: enter } = useContractWrite(conf1);
-
-  const { config: conf2 } = usePrepareContractWrite({
-    address: tokenAddress,
-    abi: tokenABI,
-    functionName: "approve",
-    args: [contractAddress, "10000000000000000000000"],
-  });
-  const { write: appr } = useContractWrite(conf2);
-
-  const { data: allow } = useContractRead({
-    address: tokenAddress,
-    abi: tokenABI,
-    functionName: "allowance",
-    args: [addr, contractAddress],
-  });
 
   return (
     <div className={style.wrapper}>
@@ -84,8 +48,9 @@ const LotteryCard = () => {
       </div>
       {/* TODO: Add onClick functionality to the buttons */}
       {
-        <div className={style.voltagebutton} onClick={enter}>
-          <button>{wait}</button>
+        <div className={style.voltagebutton} onClick={() => enter?.()}>
+          <button disabled={wait != "ENTER" ? true : false}>{wait}</button>
+
           <svg
             version="1.1"
             xmlns="http://www.w3.org/2000/svg"
