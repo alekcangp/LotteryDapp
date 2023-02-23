@@ -58,6 +58,7 @@ export const AppProvider = ({ children }) => {
 
   const waitForEntering = useWaitForTransaction({
     hash: has1?.hash,
+    timeout: 30_000,
     onSettled(data, error) {
       setWait("ENTER");
       updateLottery();
@@ -79,6 +80,7 @@ export const AppProvider = ({ children }) => {
   });
   const waitForApproving = useWaitForTransaction({
     hash: has2?.hash,
+    timeout: 30_000,
     onSettled(data, error) {
       setWait("ENTER");
       if (!error) ente();
