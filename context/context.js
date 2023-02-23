@@ -49,11 +49,7 @@ export const AppProvider = ({ children }) => {
     functionName: "enter",
     args: [],
   });
-  const {
-    write: ente,
-    status: stat1,
-    data: has1,
-  } = useContractWrite({
+  const { write: ente, data: has1 } = useContractWrite({
     ...conf1,
     onSuccess(data) {
       setWait(<img src={spin} />);
@@ -75,11 +71,7 @@ export const AppProvider = ({ children }) => {
     functionName: "approve",
     args: [contractAddress, "10000000000000000000000"],
   });
-  const {
-    write: appr,
-    status: stat2,
-    data: has2,
-  } = useContractWrite({
+  const { write: appr, data: has2 } = useContractWrite({
     ...conf2,
     onSuccess(data) {
       setWait(<img src={spin} />);
@@ -89,6 +81,7 @@ export const AppProvider = ({ children }) => {
     hash: has2?.hash,
     onSettled(data, error) {
       setWait("ENTER");
+      if (!error) ente();
     },
   });
 
@@ -101,34 +94,15 @@ export const AppProvider = ({ children }) => {
 
   useEffect(() => {
     updateLottery();
-    //setWait("ENTER");
-    //infi();
     //connectWallet();
   }, [lotteryContract]);
 
-  // useEffect(() => {
-  //   infi();
-  // }, [stat1, stat2]);
-
-  const infi = () => {
-    if ((stat1 || stat2) == "loading") {
-      //setWait(<img src={spin} />);
-    } //else {
-    // setWait("ENTER");
-    // }
-
-    console.log(stat1);
-  };
-  console.log(waitForEntering.status);
   const enter = () => {
-    //setWait(<img src={spin} />);
+    if (!addr || wait != "ENTER") return;
     if (allow == 0x00) {
       appr();
     } else {
       ente();
-      //console.log(a);
-
-      //setWait("ENTER");
     }
   };
 
