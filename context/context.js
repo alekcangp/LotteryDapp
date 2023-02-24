@@ -1,7 +1,7 @@
 import { createContext, useState, useEffect, useContext } from "react";
-import Web3 from "web3";
-import createLotteryContract from "../utils/lotteryContract";
-import createTokenContract from "../utils/tokenContract";
+//import Web3 from "web3";
+//import createLotteryContract from "../utils/lotteryContract";
+//import createTokenContract from "../utils/tokenContract";
 //import { contractAddress } from "../utils/constants.js";
 import spin from "./spin.svg";
 import {
@@ -31,9 +31,9 @@ export const appContext = createContext();
 export const AppProvider = ({ children }) => {
   const [address, setAddress] = useState("");
   //const [chainId, setChain] = useState("");
-  const [web3, setWeb3] = useState();
-  const [lotteryContract, setLotteryContract] = useState();
-  const [tokenContract, setTokenContract] = useState();
+  //const [web3, setWeb3] = useState();
+  //const [lotteryContract, setLotteryContract] = useState();
+  // const [tokenContract, setTokenContract] = useState();
   const [lotteryPot, setLotteryPot] = useState(" ");
   const [wait, setWait] = useState("ENTER");
   const [lotteryPlayers, setLotteryPlayers] = useState([]);
@@ -43,6 +43,7 @@ export const AppProvider = ({ children }) => {
 
   const { address: addr } = useAccount();
 
+  // ENTERING
   const { config: conf1 } = usePrepareContractWrite({
     address: contractAddress,
     abi: contractABI,
@@ -65,7 +66,7 @@ export const AppProvider = ({ children }) => {
     },
   });
 
-  //
+  // APPROVING
   const { config: conf2 } = usePrepareContractWrite({
     address: tokenAddress,
     abi: tokenABI,
@@ -87,6 +88,7 @@ export const AppProvider = ({ children }) => {
     },
   });
 
+  // CHECK ALLOW
   const { data: allow } = useContractRead({
     address: tokenAddress,
     abi: tokenABI,
@@ -94,12 +96,40 @@ export const AppProvider = ({ children }) => {
     args: [addr, contractAddress],
   });
 
+  //PICKING
+  const { config: conf3 } = usePrepareContractWrite({
+    address: contractAddress,
+    abi: contractABI,
+    functionName: "pickWinner",
+    args: [],
+  });
+  const { write: pick, data: has3 } = useContractWrite({
+    ...conf3,
+    onSuccess(data) {
+      setWait(<img src={spin} />);
+    },
+  });
+
+  const waitForPicking = useWaitForTransaction({
+    hash: has3?.hash,
+    timeout: 30_000,
+    onSettled(data, error) {
+      setWait("ENTER");
+      updateLottery();
+    },
+  });
+
+  const pickWinner = () => {
+    pick();
+  };
+
   useEffect(() => {
     updateLottery();
+    setAddress(addr);
     //connectWallet();
-  }, [lotteryContract]);
+  }, [addr]);
 
-  const enter = () => {
+  const enterLottery = () => {
     if (!addr || wait != "ENTER") return;
     if (allow == 0x00) {
       appr();
@@ -124,6 +154,7 @@ export const AppProvider = ({ children }) => {
   }
   //Update the lottery Card
   const updateLottery = async () => {
+    /*
     if (lotteryContract) {
       const pot = await lotteryContract.methods.getbalance().call();
       setLotteryPot(web3.utils.fromWei(pot, "ether") + " WBGL");
@@ -133,13 +164,14 @@ export const AppProvider = ({ children }) => {
       setLastWinner(await lotteryContract.methods.getWinners().call());
       // console.log([...lastWinner], "Last Winners");
     } else {
-      setLotteryId(await tg("lotteryId"));
-      setLotteryPot(Math.floor((await tg("getbalance")) * 10 ** -18) + " WBGL");
-      setLastWinner(await tg("getWinners"));
-      setLotteryPlayers(await tg("getPlayers"));
-    }
+     */
+    setLotteryId(await tg("lotteryId"));
+    setLotteryPot(Math.floor((await tg("getbalance")) * 10 ** -18) + " WBGL");
+    setLastWinner(await tg("getWinners"));
+    setLotteryPlayers(await tg("getPlayers"));
+    // }
   };
-
+  /*
   const connectWallet = async () => {
     // Check if MetaMask is installed
     if (
@@ -251,11 +283,11 @@ export const AppProvider = ({ children }) => {
     }
     //setWait("ENTER");
   };
-
+*/
   return (
     <appContext.Provider
       value={{
-        connectWallet,
+        //connectWallet,
         address,
         enterLottery,
         lotteryPot,
@@ -265,7 +297,6 @@ export const AppProvider = ({ children }) => {
         lastWinner,
         owner,
         wait,
-        enter,
       }}
     >
       {children}

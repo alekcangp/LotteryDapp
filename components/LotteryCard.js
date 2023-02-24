@@ -5,8 +5,7 @@ import { useAppContext } from "../context/context";
 const LotteryCard = () => {
   // TODO: Get the data needed from context
   const {
-    //enterLottery,
-    enter,
+    enterLottery,
     lotteryPot,
     lotteryId,
     pickWinner,
@@ -48,7 +47,7 @@ const LotteryCard = () => {
       </div>
       {/* TODO: Add onClick functionality to the buttons */}
       {
-        <div className={style.voltagebutton} onClick={() => enter?.()}>
+        <div className={style.voltagebutton} onClick={enterLottery}>
           <button disabled={wait != "ENTER" ? true : false}>{wait}</button>
 
           <svg
