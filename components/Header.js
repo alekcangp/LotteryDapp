@@ -1,13 +1,13 @@
 import style from "../styles/Header.module.css";
-import truncateEthAddress from "truncate-eth-address";
-import ConnectWalletBtn from "./ConnectWalletBtn";
-import UserCard from "./UserCard";
-import { useAppContext } from "../context/context";
+//import truncateEthAddress from "truncate-eth-address";
+//import ConnectWalletBtn from "./ConnectWalletBtn";
+//import UserCard from "./UserCard";
+//import { useAppContext } from "../context/context";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 const Header = () => {
   // TODO: Get the connectWallet and address from context.
   // TODO: Replace the static address with the currently logged in user.
-  const { connectWallet, address } = useAppContext();
+  //const { connectWallet, address } = useAppContext();
 
   return (
     <div className={style.wrapper}>
