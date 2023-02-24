@@ -13,6 +13,7 @@ import {
 } from "../utils/constants.js";
 import {
   useAccount,
+  useNetwork,
   useContractRead,
   useContractWrite,
   usePrepareContractWrite,
@@ -44,7 +45,8 @@ export const AppProvider = ({ children }) => {
 
   const addRecentTransaction = useAddRecentTransaction();
 
-  const { address: addr } = useAccount();
+  const { address: addr, isDisconnected } = useAccount();
+  const { chain } = useNetwork();
 
   // ENTERING
   const { config: conf1 } = usePrepareContractWrite({
@@ -100,12 +102,50 @@ export const AppProvider = ({ children }) => {
     },
   });
 
+  /*
+  const contractId = useContractRead({
+    address: contractAddress,
+    abi: contractABI,
+    functionName: 'lotteryId',
+    watch: true,
+  })
+  
+  const contractBalance = useContractRead({
+    address: contractAddress,
+    abi: contractABI,
+    functionName: 'getbalance',
+    watch: true,
+  })
+  
+  const contractWinners = useContractRead({
+    address: contractAddress,
+    abi: contractABI,
+    functionName: 'getWinners',
+    watch: true,
+  })
+  
+  const contractPlayers = useContractRead({
+    address: contractAddress,
+    abi: contractABI,
+    functionName: 'getPlayers',
+    watch: true,
+  })
+  
+*/
   // CHECK ALLOW
   const { data: allow } = useContractRead({
     address: tokenAddress,
     abi: tokenABI,
     functionName: "allowance",
     args: [addr, contractAddress],
+  });
+
+  // CHECK BALANCE
+  const { data: bala } = useContractRead({
+    address: tokenAddress,
+    abi: tokenABI,
+    functionName: "balanceOf",
+    args: [addr],
   });
 
   //PICKING
@@ -115,7 +155,7 @@ export const AppProvider = ({ children }) => {
     functionName: "pickWinner",
     args: [],
   });
-  const { write: pick, data: has3 } = useContractWrite({
+  const { write: pickwin, data: has3 } = useContractWrite({
     ...conf3,
     onSuccess(data) {
       setWait(<img src={spin} />);
@@ -128,30 +168,37 @@ export const AppProvider = ({ children }) => {
 
   const waitForPicking = useWaitForTransaction({
     hash: has3?.hash,
-    timeout: 30_000,
+    timeout: 60_000,
     onSettled(data, error) {
       setWait("ENTER");
       updateLottery();
     },
   });
 
-  const pickWinner = () => {
-    pick();
-  };
-
   useEffect(() => {
     updateLottery();
     setAddress(addr);
     //connectWallet();
-  }, [addr]);
+  }, [contractAddress, addr]);
 
   const enterLottery = () => {
-    if (!addr || wait != "ENTER") return;
+    if (isDisconnected) alert("Connect wallet");
+    if (!addr || wait != "ENTER" || chain?.id != 5) return;
+    //console.log(parseInt(bala._hex));
+    if (parseInt(bala._hex) < 5) {
+      alert("Insufficient Balance. Requires 5 WBGL");
+      return;
+    }
     if (allow == 0x00) {
       appr();
     } else {
       ente();
     }
+  };
+
+  const pickWinner = () => {
+    if (!addr || wait != "ENTER" || chain?.id != 5) return;
+    pickwin();
   };
 
   // Call contract function
@@ -181,6 +228,7 @@ export const AppProvider = ({ children }) => {
       // console.log([...lastWinner], "Last Winners");
     } else {
      */
+
     setLotteryId(await tg("lotteryId"));
     setLotteryPot(Math.floor((await tg("getbalance")) * 10 ** -18) + " WBGL");
     setLastWinner(await tg("getWinners"));
