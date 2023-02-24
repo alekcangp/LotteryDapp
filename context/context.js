@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect, useContext } from "react";
+import { useAddRecentTransaction } from "@rainbow-me/rainbowkit";
 //import Web3 from "web3";
 //import createLotteryContract from "../utils/lotteryContract";
 //import createTokenContract from "../utils/tokenContract";
@@ -41,6 +42,8 @@ export const AppProvider = ({ children }) => {
   const [lotteryId, setLotteryId] = useState(" ");
   const owner = "0xA1485801Ea9d4c890BC7563Ca92d90c4ae52eC75";
 
+  const addRecentTransaction = useAddRecentTransaction();
+
   const { address: addr } = useAccount();
 
   // ENTERING
@@ -53,13 +56,18 @@ export const AppProvider = ({ children }) => {
   const { write: ente, data: has1 } = useContractWrite({
     ...conf1,
     onSuccess(data) {
+      //console.log(data?.hash);
       setWait(<img src={spin} />);
+      addRecentTransaction({
+        hash: data?.hash,
+        description: "Enter",
+      });
     },
   });
 
   const waitForEntering = useWaitForTransaction({
     hash: has1?.hash,
-    timeout: 30_000,
+    timeout: 60_000,
     onSettled(data, error) {
       setWait("ENTER");
       updateLottery();
@@ -77,11 +85,15 @@ export const AppProvider = ({ children }) => {
     ...conf2,
     onSuccess(data) {
       setWait(<img src={spin} />);
+      addRecentTransaction({
+        hash: data?.hash,
+        description: "Approve",
+      });
     },
   });
   const waitForApproving = useWaitForTransaction({
     hash: has2?.hash,
-    timeout: 30_000,
+    timeout: 60_000,
     onSettled(data, error) {
       setWait("ENTER");
       if (!error) ente();
@@ -107,6 +119,10 @@ export const AppProvider = ({ children }) => {
     ...conf3,
     onSuccess(data) {
       setWait(<img src={spin} />);
+      addRecentTransaction({
+        hash: data?.hash,
+        description: "Pick winner",
+      });
     },
   });
 
