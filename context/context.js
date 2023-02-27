@@ -76,32 +76,6 @@ export const AppProvider = ({ children }) => {
     },
   });
 
-  // APPROVING
-  const { config: conf2 } = usePrepareContractWrite({
-    address: tokenAddress,
-    abi: tokenABI,
-    functionName: "approve",
-    args: [contractAddress, "10000000000000000000000"],
-  });
-  const { write: appr, data: has2 } = useContractWrite({
-    ...conf2,
-    onSuccess(data) {
-      setWait(<img src={spin} />);
-      addRecentTransaction({
-        hash: data?.hash,
-        description: "Approve",
-      });
-    },
-  });
-  const waitForApproving = useWaitForTransaction({
-    hash: has2?.hash,
-    timeout: 60_000,
-    onSettled(data, error) {
-      setWait("ENTER");
-      if (!error) ente();
-    },
-  });
-
   /*
   const contractId = useContractRead({
     address: contractAddress,
@@ -138,6 +112,7 @@ export const AppProvider = ({ children }) => {
     abi: tokenABI,
     functionName: "allowance",
     args: [addr, contractAddress],
+    watch: true,
   });
 
   // CHECK BALANCE
@@ -146,6 +121,7 @@ export const AppProvider = ({ children }) => {
     abi: tokenABI,
     functionName: "balanceOf",
     args: [addr],
+    watch: true,
   });
 
   //PICKING
@@ -181,6 +157,36 @@ export const AppProvider = ({ children }) => {
     //connectWallet();
   }, [contractAddress, addr]);
 
+  // APPROVING
+  const { config: conf2 } = usePrepareContractWrite({
+    address: tokenAddress,
+    abi: tokenABI,
+    functionName: "approve",
+    args: [contractAddress, "10000000000000000000000"],
+  });
+  const { write: appr, data: has2 } = useContractWrite({
+    ...conf2,
+    onSuccess(data) {
+      setWait(<img src={spin} />);
+      addRecentTransaction({
+        hash: data?.hash,
+        description: "Approve",
+      });
+    },
+  });
+  const waitForApproving = useWaitForTransaction({
+    hash: has2?.hash,
+    timeout: 60_000,
+    onSettled(data, error) {
+      if (!error) {
+        setTimeout(ente, 2000);
+      } else {
+        setWait("ENTER");
+      }
+    },
+  });
+
+  //ENTER
   const enterLottery = () => {
     if (isDisconnected) alert("Connect wallet");
     if (!addr || wait != "ENTER" || chain?.id != 5) return;
@@ -189,15 +195,70 @@ export const AppProvider = ({ children }) => {
       alert("Insufficient Balance. Requires 5 WBGL");
       return;
     }
-    if (allow == 0x00) {
+    if (allow._hex == 0x00) {
       appr();
     } else {
       ente();
     }
   };
 
-  const pickWinner = () => {
+  const pickWinner = async () => {
     if (!addr || wait != "ENTER" || chain?.id != 5) return;
+    /*
+    const receipt = await client.proposal(web3, addr, {
+      space: "bgldao.eth",
+      type: "single-choice", // define the voting system
+      title: "Pick winner #1",
+      body: "https://lottery.bglnode.online",
+      choices: ["Yes", "No"],
+      start: 1677427433,
+      end: 1677686633,
+      snapshot: 26005935,
+      network: "56",
+      plugins: JSON.stringify({
+        safeSnap: {
+          safes: [
+            {
+              network: "56",
+              realityAddress: "0xa7B8d36708604c46dc896893ea58357A975d6E6b",
+              txs: [
+                {
+                  hash: "0xc4868a46ac22bee2156986a90f5d1c2de91ec3b16c2e49bb8d2570177d3939dc",
+                  nonce: 0,
+                  mainTransaction: {
+                    to: "0xad9E04188058B877Bc894b4c30Ba39A5c442AF27",
+                    data: "0x5d495aea",
+                    nonce: "0",
+                    operation: "0",
+                    type: "contractInteraction",
+                    value: "0",
+                    abi: ["function pickWinner()"],
+                  },
+                  transactions: [
+                    {
+                      to: "0xad9E04188058B877Bc894b4c30Ba39A5c442AF27",
+                      data: "0x5d495aea",
+                      nonce: 0,
+                      operation: "0",
+                      type: "contractInteraction",
+                      value: "0",
+                      abi: ["function pickWinner()"],
+                    },
+                  ],
+                },
+              ],
+              multiSendAddress: "0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761",
+              hash: "0x552cca439bfb45142b3e7ccf5d90e0e6403e87a7a05d2fab246bd287ace351e2",
+            },
+          ],
+          valid: true,
+        },
+      }),
+      app: "snapshot", // provide the name of your project which is using this snapshot.js integration
+    });
+    //pickwin();
+    receipt();
+    */
     pickwin();
   };
 
