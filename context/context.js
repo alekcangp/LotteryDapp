@@ -188,10 +188,11 @@ export const AppProvider = ({ children }) => {
 
   //ENTER
   const enterLottery = () => {
+    //console.log(parseInt(bala._hex));
     if (isDisconnected) alert("Connect wallet");
     if (!addr || wait != "ENTER" || chain?.id != 5) return;
-    //console.log(parseInt(bala._hex));
-    if (parseInt(bala._hex) < 5) {
+
+    if (parseInt(bala._hex) < 5 * 10 ** 18) {
       alert("Insufficient Balance. Requires 5 WBGL");
       return;
     }
