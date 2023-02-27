@@ -48,7 +48,7 @@ const LotteryCard = () => {
       {/* TODO: Add onClick functionality to the buttons */}
       {
         <div className={style.voltagebutton} onClick={enterLottery}>
-          <button disabled={wait != "ENTER" ? true : false}>{wait}</button>
+          <button>{wait}</button>
 
           <svg
             version="1.1"
