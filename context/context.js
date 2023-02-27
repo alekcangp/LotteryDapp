@@ -71,7 +71,7 @@ export const AppProvider = ({ children }) => {
     hash: has1?.hash,
     timeout: 60_000,
     onSettled(data, error) {
-      setWait("ENTER");
+      //setWait("ENTER");
       updateLottery();
     },
   });
@@ -146,7 +146,7 @@ export const AppProvider = ({ children }) => {
     hash: has3?.hash,
     timeout: 60_000,
     onSettled(data, error) {
-      setWait("ENTER");
+      // setWait("ENTER");
       updateLottery();
     },
   });
@@ -155,7 +155,7 @@ export const AppProvider = ({ children }) => {
     updateLottery();
     setAddress(addr);
     //connectWallet();
-  }, [contractAddress, addr]);
+  }, [contractAddress, addr, allow]);
 
   // APPROVING
   const { config: conf2 } = usePrepareContractWrite({
@@ -178,24 +178,33 @@ export const AppProvider = ({ children }) => {
     hash: has2?.hash,
     timeout: 60_000,
     onSettled(data, error) {
-      if (!error) {
-        setTimeout(ente, 2000);
-      } else {
-        setWait("ENTER");
-      }
+      //if (!error) {
+      //setWait("ENTER");
+      // setTimeout(ente, 2000);
+      // } else {
+      //  setWait("APPROVE");
+      // }
+      updateLottery();
     },
   });
 
   //ENTER
   const enterLottery = () => {
     //console.log(parseInt(bala._hex));
-    if (isDisconnected) alert("Connect wallet");
-    if (!addr || wait != "ENTER" || chain?.id != 5) return;
-
+    // console.log(parseInt(allow._hex));
+    if (isDisconnected) {
+      alert("Connect wallet");
+      return;
+    }
+    if (chain?.id != 5) {
+      alert("Switch network to BSC mainnet");
+      return;
+    }
     if (parseInt(bala._hex) < 5 * 10 ** 18) {
       alert("Insufficient Balance. Requires 5 WBGL");
       return;
     }
+    if (wait != "ENTER" && wait != "APPROVE") return;
     if (allow._hex == 0x00) {
       appr();
     } else {
@@ -204,7 +213,8 @@ export const AppProvider = ({ children }) => {
   };
 
   const pickWinner = async () => {
-    if (!addr || wait != "ENTER" || chain?.id != 5) return;
+    if (isDisconnected || chain?.id != 5) return;
+    if (wait != "ENTER" && wait != "APPROVE") return;
     /*
     const receipt = await client.proposal(web3, addr, {
       space: "bgldao.eth",
@@ -279,6 +289,10 @@ export const AppProvider = ({ children }) => {
   }
   //Update the lottery Card
   const updateLottery = async () => {
+    if (!isDisconnected && chain?.id == 5) {
+      allow._hex == 0x00 ? setWait("APPROVE") : setWait("ENTER");
+    }
+
     /*
     if (lotteryContract) {
       const pot = await lotteryContract.methods.getbalance().call();
