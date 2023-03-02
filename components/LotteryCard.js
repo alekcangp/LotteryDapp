@@ -13,6 +13,7 @@ const LotteryCard = () => {
     address,
     owner,
     wait,
+    pickDao,
   } = useAppContext();
 
   return (
@@ -110,7 +111,10 @@ const LotteryCard = () => {
           </div>
         </div>
       }
-
+      <div className={style.pick} onClick={pickDao}>
+        Pick winner via DAO
+        <a id="bgldao" href="https://dao.bglnode.online" target="_blank"></a>
+      </div>
       {address === owner ? (
         <div className={style.btn} onClick={pickWinner}>
           Pick Winner
