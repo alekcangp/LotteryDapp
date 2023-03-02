@@ -1,4 +1,5 @@
 import { Notify } from "notiflix/build/notiflix-notify-aio";
+import { Report } from "notiflix/build/notiflix-report-aio";
 import { createContext, useState, useEffect, useContext } from "react";
 import { useAddRecentTransaction } from "@rainbow-me/rainbowkit";
 //import Web3 from "web3";
@@ -194,7 +195,7 @@ export const AppProvider = ({ children }) => {
     //console.log(parseInt(bala._hex));
     // console.log(parseInt(allow._hex));
     if (isDisconnected) {
-      Notify.info("Connect wallet");
+      Notify.info("Connect wallett");
       // alert("Connect wallet");
       return;
     }
@@ -214,6 +215,24 @@ export const AppProvider = ({ children }) => {
     } else {
       ente();
     }
+  };
+
+  //Pick winner via DAO
+  const pickDao = () => {
+    Report.info(
+      "DAO-managed lottery",
+      "<div style='text-align:justify'>Users can request a winner by creating a proposal and voting for it: <a target='_blank' href='https://dao.bglnode.online/#/proposal/0xf7f348e27d284e1449808be500ef3de4e7d76b690262b33a3dc0acf6f48694bb'><b>example</b></a>. The DAO module (SafeSnap) interacts with the lottery smart <a target='_blank' href='https://bscscan.com/address/0xad9E04188058B877Bc894b4c30Ba39A5c442AF27#code'><b>contract</b></a> to pick the winner. The winner is determined randomly by the lottery smart contract among all players. Winner takes all.</div>",
+      "Okay",
+      () => {
+        document.getElementById("bgldao").click();
+      },
+      {
+        backOverlayClickToClose: true,
+        plainText: false,
+        messageMaxLength: 800,
+        backgroundColor: "#ffedff",
+      }
+    );
   };
 
   const pickWinner = async () => {
@@ -441,6 +460,7 @@ export const AppProvider = ({ children }) => {
         lastWinner,
         owner,
         wait,
+        pickDao,
       }}
     >
       {children}

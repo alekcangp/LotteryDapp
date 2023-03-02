@@ -1,3 +1,10 @@
+.pick {
+  margin-top: 20px;
+  color: #ff4080;
+  cursor: pointer;
+  font-weight: bold;
+}
+
 .wait {
   color: #ff4080;
   font-size: 1.3rem;
