@@ -17,6 +17,7 @@
     "moralis": "^2.14.2",
     "next": "12.2.5",
     "next-images": "^1.8.4",
+    "notiflix": "^3.2.6",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "sass": "^1.58.2",
