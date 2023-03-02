@@ -1,3 +1,4 @@
+import { Notify } from "notiflix/build/notiflix-notify-aio";
 import { createContext, useState, useEffect, useContext } from "react";
 import { useAddRecentTransaction } from "@rainbow-me/rainbowkit";
 //import Web3 from "web3";
@@ -193,19 +194,22 @@ export const AppProvider = ({ children }) => {
     //console.log(parseInt(bala._hex));
     // console.log(parseInt(allow._hex));
     if (isDisconnected) {
-      alert("Connect wallet");
+      Notify.info("Connect wallet");
+      // alert("Connect wallet");
       return;
     }
     if (chain?.id != 5) {
-      alert("Switch network to BSC mainnet");
+      Notify.info("Switch network to BSC mainnet");
       return;
     }
-    if (parseInt(bala._hex) < 5 * 10 ** 18) {
-      alert("Insufficient Balance. Requires 5 WBGL");
+    if (parseInt(bala?._hex) < 5 * 10 ** 18) {
+      Notify.info("Insufficient Balance.<br>Requires 50 WBGL", {
+        plainText: false,
+      });
       return;
     }
     if (wait != "ENTER" && wait != "APPROVE") return;
-    if (allow._hex == 0x00) {
+    if (allow?._hex == 0x00) {
       appr();
     } else {
       ente();
@@ -290,7 +294,7 @@ export const AppProvider = ({ children }) => {
   //Update the lottery Card
   const updateLottery = async () => {
     if (!isDisconnected && chain?.id == 5) {
-      allow._hex == 0x00 ? setWait("APPROVE") : setWait("ENTER");
+      allow?._hex == 0x00 ? setWait("APPROVE") : setWait("ENTER");
     }
 
     /*
