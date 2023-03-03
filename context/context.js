@@ -43,7 +43,7 @@ export const AppProvider = ({ children }) => {
   const [lotteryPlayers, setLotteryPlayers] = useState([]);
   const [lastWinner, setLastWinner] = useState([]);
   const [lotteryId, setLotteryId] = useState(" ");
-  const owner = "0xA1485801Ea9d4c890BC7563Ca92d90c4ae52eC75";
+  const owner = "0xfCb8f65b07695D940BE118acb6665e09b35c8eFB";
 
   const addRecentTransaction = useAddRecentTransaction();
 
@@ -199,11 +199,11 @@ export const AppProvider = ({ children }) => {
       // alert("Connect wallet");
       return;
     }
-    if (chain?.id != 5) {
+    if (chain?.id != 56) {
       Notify.info("Switch network to BSC mainnet");
       return;
     }
-    if (parseInt(bala?._hex) < 5 * 10 ** 18) {
+    if (parseInt(bala?._hex) < 50 * 10 ** 18) {
       Notify.info("Insufficient Balance.<br>Requires 50 WBGL", {
         plainText: false,
       });
@@ -222,7 +222,7 @@ export const AppProvider = ({ children }) => {
     Report.info(
       "DAO-managed lottery",
       "<div style='text-align:justify'>Users can request a winner by creating a proposal and voting for it: <a target='_blank' href='https://dao.bglnode.online/#/proposal/0xf7f348e27d284e1449808be500ef3de4e7d76b690262b33a3dc0acf6f48694bb'><b>example</b></a>. The DAO module (SafeSnap) interacts with the lottery smart <a target='_blank' href='https://bscscan.com/address/0xad9E04188058B877Bc894b4c30Ba39A5c442AF27#code'><b>contract</b></a> to pick the winner. The winner is determined randomly by the lottery smart contract among all players. Winner takes all.</div>",
-      "Okay",
+      "Visit DAO",
       () => {
         document.getElementById("bgldao").click();
       },
@@ -236,7 +236,7 @@ export const AppProvider = ({ children }) => {
   };
 
   const pickWinner = async () => {
-    if (isDisconnected || chain?.id != 5) return;
+    if (isDisconnected || chain?.id != 56) return;
     if (wait != "ENTER" && wait != "APPROVE") return;
     /*
     const receipt = await client.proposal(web3, addr, {
@@ -299,7 +299,7 @@ export const AppProvider = ({ children }) => {
   // Call contract function
   async function tg(func) {
     const abi = abii.abi;
-    const chain = EvmChain.GOERLI; // BSC, GOERLI
+    const chain = EvmChain.BSC; // BSC, GOERLI
     const address = contractAddress;
     var functionName = func;
     const resp = await Moralis.EvmApi.utils.runContractFunction({
@@ -312,7 +312,7 @@ export const AppProvider = ({ children }) => {
   }
   //Update the lottery Card
   const updateLottery = async () => {
-    if (!isDisconnected && chain?.id == 5) {
+    if (!isDisconnected && chain?.id == 56) {
       allow?._hex == 0x00 ? setWait("APPROVE") : setWait("ENTER");
     }
 
