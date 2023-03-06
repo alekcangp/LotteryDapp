@@ -193,7 +193,7 @@ export const AppProvider = ({ children }) => {
   //ENTER
   const enterLottery = () => {
     //console.log(parseInt(bala._hex));
-    // console.log(parseInt(allow._hex));
+    console.log(parseInt(allow?._hex));
     if (isDisconnected) {
       Notify.info("Connect wallett");
       // alert("Connect wallet");
@@ -210,7 +210,7 @@ export const AppProvider = ({ children }) => {
       return;
     }
     if (wait != "ENTER" && wait != "APPROVE") return;
-    if (allow?._hex == 0x00) {
+    if (parseInt(allow?._hex) < 50 * 10 ** 18) {
       appr();
     } else {
       ente();
@@ -313,7 +313,9 @@ export const AppProvider = ({ children }) => {
   //Update the lottery Card
   const updateLottery = async () => {
     if (!isDisconnected && chain?.id == 56) {
-      allow?._hex == 0x00 ? setWait("APPROVE") : setWait("ENTER");
+      parseInt(allow?._hex) < 50 * 10 ** 18
+        ? setWait("APPROVE")
+        : setWait("ENTER");
     }
 
     /*
