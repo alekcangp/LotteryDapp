@@ -38,7 +38,10 @@ const LotteryCard = () => {
             <div className={style.winner}>
               <a
                 target="_blank"
-                href={"https://bscscan.com/address/" + lastWinner}
+                href={
+                  "https://bscscan.com/address/" +
+                  lastWinner[lastWinner.length - 1]
+                }
               >
                 {truncateEthAddress(lastWinner[lastWinner.length - 1])}
               </a>
